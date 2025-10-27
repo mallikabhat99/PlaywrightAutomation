@@ -26,7 +26,7 @@ test('UI Controls', async ({ browser }) => {
     await expect(documentLink).toHaveAttribute('class', 'blinkingText');
 });
 
-test.only('Child window handling', async ({ browser }) => {
+test('Child window handling', async ({ browser }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
     const userName = page.locator('#username');
@@ -47,7 +47,6 @@ test.only('Child window handling', async ({ browser }) => {
 
     //fill the value/email in parent page
     await userName.fill(domain);
-    await page.pause();
     console.log(await userName.inputValue()); //text content will fetch only when its attached to dom
     //use inputValue() - when content added dynamicallyl̥
 });
