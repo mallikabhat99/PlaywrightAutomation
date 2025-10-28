@@ -1,6 +1,6 @@
 const {test,expect} = require('@playwright/test');
 
-test('Page fixture playwright test', async({page})=>{
+test('Client app with css locators', async({page})=>{
     const userName = page.locator('#userEmail');
     const signInButton = page.locator('#login');
     const titles = page.locator(".card-body b");
