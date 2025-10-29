@@ -18,7 +18,6 @@ test('Security check using playwright', async ({ page }) => {
     await page.waitForLoadState('networkidle');
     //alternative if above line doesnt work
     await page.locator(".card-body b").first().waitFor();
-
     await page.locator('button[routerlink*="myorders"]').click();
     await page.locator('tbody').waitFor();
 
