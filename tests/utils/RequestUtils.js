@@ -1,5 +1,4 @@
-export default class APiUtils{
-
+class RequestUtils{
     constructor(apiContext, loginPayLoad) {
         this.apiContext = apiContext;
         this.loginPayLoad = loginPayLoad;
@@ -34,4 +33,4 @@ export default class APiUtils{
     }
 }
  
-module.exports = {APiUtils};
+module.exports = {RequestUtils};
