@@ -1,85 +1,37 @@
-const { test, expect,request } = require('@playwright/test');
-const loginPayload = {userEmail:"mallikabhat99@gmail.com",userPassword:"Mamatha@$54"}
-let token;
+const { test, expect, request } = require('@playwright/test');
+const {APiUtils} = require('../utils/APiUtils');
+const loginPayLoad = { userEmail: "anshika@gmail.com", userPassword: "Iamking@000" };
+const orderPayLoad = { orders: [{ country: "Cuba", productOrderedId: "67a8dde5c0d3e6622a297cc8" }] };
+let response;
 
-test.beforeAll('before all tests',async()=>{
-        console.log("This is before all tests");
-        const apiContext = await request.newContext();
-        const loginResponse = await apiContext.post('https://rahulshettyacademy.com/api/ecom/auth/login',
-            {
-                data:loginPayload
-            })
-            expect((loginResponse).ok()).toBeTruthy();
-            const loginResponseJson =await loginResponse.json();
-            token = loginResponseJson.token;
-            console.log("Token:"+token);
-});
+test.beforeAll(async () => {
+    const apiContext = await request.newContext();
+    const apiUtils = new APiUtils(apiContext, loginPayLoad);
+    response = await apiUtils.createOrder(orderPayLoad);
 
-test.beforeEach('before each test',async()=>{
-        console.log("This is before each test");
-});
+})
 
-test('Client app with API login', async({page})=>{
-    //execute script before page load
-    await page.addInitScript(value=>{
-       window.localStorage.setItem('token',value);
-    },token);
+//create order is success
+test('@API Place the order', async ({ page }) => {
+    await page.addInitScript(value => {
 
-    const titles = page.locator(".card-body b");
-    const products = page.locator(".card-body");
-    const productName = "ZARA COAT 3";
+        window.localStorage.setItem('token', value);
+    }, response.token);
+    await page.goto("https://rahulshettyacademy.com/client");
+    await page.locator("button[routerlink*='myorders']").click();
+    await page.locator("tbody").waitFor();
+    const rows = await page.locator("tbody tr");
 
-    await page.goto('https://rahulshettyacademy.com/client/');
-    await page.waitForLoadState('networkidle');
-    //alternative if above line doesnt work
-    await page.locator(".card-body b").first().waitFor();
-    const allTitles = await titles.allTextContents(); // returns array
-    console.log(allTitles);
 
-    //select zara coat 4
-    const count = await products.count();
-    for(let i=0 ; i<count;i++){
-       if(await products.nth(i).locator('b').textContent()===productName)
-       {
-       await products.nth(i).locator('text= Add To Cart').last().click();
-       break;
-       }
-    }
-    await page.locator('[routerlink*="cart"]').click();
-    await page.locator('div li').first().waitFor();
-    const bool = await page.locator('h3:has-text("ZARA COAT 3")').isVisible();
-    expect(bool).toBeTruthy();
-
-    await page.locator('text=Checkout').click();
-    await page.locator("[placeholder*='Country']").pressSequentially("ind", { delay: 150 });
-    const dropdown = await page.locator('.ta-results');
-    await dropdown.waitFor();
-    const length = await dropdown.locator('button').count();
-    for(let j=0; j<length ; j++){
-        if( await dropdown.locator('button').nth(j).textContent()===" India"){
-            await dropdown.locator('button').nth(j).click();
+    for (let i = 0; i < await rows.count(); ++i) {
+        const rowOrderId = await rows.nth(i).locator("th").textContent();
+        if (response.orderId.includes(rowOrderId)) {
+            await rows.nth(i).locator("button").first().click();
             break;
-        } 
+        }
     }
-    await expect(page.locator('.user__name [type="text"]').first()).toHaveText(email);
-    await page.locator('.action__submit').click();
-    await expect(page.locator('.hero-primary')).toHaveText(' Thankyou for the order. ');
-    const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
-    console.log(orderId);
-
-
-    await page.locator('button[routerlink*="myorders"]').click();
-    await page.locator('tbody').waitFor();
-
-    const rows = await page.locator('tbody tr');
-   for (let i = 0; i < await rows.count(); ++i) {
-      const rowOrderId = await rows.nth(i).locator("th").textContent();
-      if (orderId.includes(rowOrderId)) {
-         await rows.nth(i).locator("button").first().click();
-         break;
-      }
-   }
-   const orderIdDetails = await page.locator(".col-text").textContent();
-   expect(orderId.includes(orderIdDetails)).toBeTruthy();
+    const orderIdDetails = await page.locator(".col-text").textContent();
+    //await page.pause();
+    expect(response.orderId.includes(orderIdDetails)).toBeTruthy();
 
 });
