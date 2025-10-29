@@ -19,6 +19,7 @@ test('API response faking', async ({ page }) => {
     await page.goto("https://rahulshettyacademy.com/client");
     //intercepting response -APi response->
     //{playwright fakeresponse}->browser->render data on front end
+    //response modification is done by fulfill method
     await page.route('https://rahulshettyacademy.com/api/ecom/order/get-orders-for-customer/*',
        async route => {
           const response = await page.request.fetch(route.request());
