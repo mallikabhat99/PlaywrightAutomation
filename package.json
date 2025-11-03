@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test" :"npx playwright test tests/WebAPIPart1.spec.js --debug"
+    "test": "npx playwright test tests/WebAPIPart1.spec.js --debug",
+    "nodeTest": "node tests/ExcelDemo.js"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +14,8 @@
     "@playwright/test": "^1.56.1",
     "@types/node": "^24.9.1",
     "playwright": "^1.56.1"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
   }
 }
