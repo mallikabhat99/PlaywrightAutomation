@@ -9,11 +9,15 @@ import { defineConfig, devices } from '@playwright/test';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+//test files will run in parallel by defualt
+//test within a test file will run sequnetially by default
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
   testDir: './tests',
+  workers : 3,
+  retries : 1,
   timeout : 40*1000,
   expect :{
     timeout: 40*1000
@@ -24,9 +28,9 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  //retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+ // workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -45,7 +49,10 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'],
-      viewport: { width: 720, height: 720 }
+      //viewport: { width: 720, height: 720 },
+      ignoreHTTPSErrors:true, //for ssl error
+      permissions: ['clipboard-read','clipboard-write','geolocation'], //granting permissions
+      video:'retain-on-failure',
        },
     },
 

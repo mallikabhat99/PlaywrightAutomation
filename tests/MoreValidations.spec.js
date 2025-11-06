@@ -1,8 +1,10 @@
 const {test,expect}= require("@playwright/test");
+test.describe.configure({mode:'parallel'});
 
 test("More validations check", async({page})=>{
 
 await page.goto("https://rahulshettyacademy.com/AutomationPractice/");
+
 //await page.goto("https://google.com");
 //await page.goBack();
 //await expect(page).toHaveURL("https://rahulshettyacademy.com/AutomationPractice/");
