@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test tests/WebAPIPart1.spec.js --debug",
-    "nodeTest": "node tests/ExcelDemo.js"
+    "nodeTest": "node tests/ExcelDemo.js",
+    "postinstall": "npx playwright install"
   },
   "keywords": [],
   "author": "",
