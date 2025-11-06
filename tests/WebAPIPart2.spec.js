@@ -14,13 +14,13 @@ test.beforeAll('runs before all tests saves storage state', async ({ browser }) 
     await page.locator('#userPassword').fill("Mamatha@$54");
     await signInButton.click();
     await page.waitForLoadState('networkidle');
-    await context.storageState({path:'state.json'});
+    await context.storageState({ path: 'state.json' });
     webContext = await browser.newContext({ storageState: 'state.json' });
 
 });
 
 test('test case 1 with storage state for login', async () => {
-//page is created dynmically , not as fixture
+    //page is created dynmically , not as fixture
     const page = await webContext.newPage();
     //above is new page created form saved content
     await page.goto('https://rahulshettyacademy.com/client/');
@@ -86,8 +86,8 @@ test('test case 1 with storage state for login', async () => {
 
 
 
-test('test case 2 with storage state for login', async () => {
-//page is created dynmically , not as fixture
+test('@API test case 2 with storage state for login', { tag: '@api' }, async () => {
+    //page is created dynmically , not as fixture
     const page = await webContext.newPage();
     //above is new page created form saved content
     await page.goto('https://rahulshettyacademy.com/client/');

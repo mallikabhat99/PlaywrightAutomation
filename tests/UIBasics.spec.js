@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-test('Browser context fixture playwright test', async ({ browser }) => {
+test('@Web Browser context fixture playwright test',{ tag: '@web' }, async ({ browser }) => {
     //playwright code - js is asynchronous
     const context = await browser.newContext(); // browser instance  we can pass cookies stuff we want
     const page = await context.newPage();
